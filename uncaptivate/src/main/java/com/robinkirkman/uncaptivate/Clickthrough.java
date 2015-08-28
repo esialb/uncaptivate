@@ -18,11 +18,16 @@ public class Clickthrough {
 		new Clickthrough("http://www.google.com/").process();
 	}
 	
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		String testURL = "http://www.google.com";
 		if(args.length > 0)
 			testURL = args[0];
-		new Clickthrough(testURL).process();
+		try {
+			new Clickthrough(testURL).process();
+			System.exit(0);
+		} catch(Throwable t) {
+			System.exit(-1);
+		}
 	}
 	
 	private Connection test;
