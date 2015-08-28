@@ -18,6 +18,13 @@ public class Clickthrough {
 		new Clickthrough("http://www.google.com/").process();
 	}
 	
+	public static void main(String[] args) throws Exception {
+		String testURL = "http://www.google.com";
+		if(args.length > 0)
+			testURL = args[0];
+		new Clickthrough(testURL).process();
+	}
+	
 	private Connection test;
 	private Queue<Iterator<Entry<String, Connection>>> pending;
 	private Set<String> visited;
