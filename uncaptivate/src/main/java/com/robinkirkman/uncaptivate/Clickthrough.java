@@ -2,8 +2,10 @@ package com.robinkirkman.uncaptivate;
 
 import java.io.IOException;
 import java.util.ArrayDeque;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Queue;
+import java.util.Set;
 
 import org.jsoup.Connection;
 import org.jsoup.helper.HttpConnection;
@@ -18,9 +20,11 @@ public class Clickthrough {
 	
 	private Connection test;
 	private Queue<Iterator<Entry<String, Connection>>> pending;
+	private Set<String> visited;
 	
 	public Clickthrough(String testURL) throws IOException {
 		pending = new ArrayDeque<>();
+		visited = new HashSet<String>();
 		test = HttpConnection.connect(testURL);
 		test.followRedirects(false);
 		
@@ -47,6 +51,12 @@ public class Clickthrough {
 			Entry<String, Connection> req = pending.peek().next();
 			String method = req.getKey();
 			Connection cxn = req.getValue();
+			
+			String vurl = cxn.request().url().toString() + cxn.request().data();
+			if(!visited.add(vurl))
+				continue;
+			
+			cxn.followRedirects(true);
 			Document doc = null;
 			if("post".equalsIgnoreCase(method)) {
 				try {
