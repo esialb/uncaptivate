@@ -27,6 +27,8 @@ public class ClickthroughIterable implements Iterable<Entry<String, Connection>>
 				String name = submit.attr("name");
 				String value = submit.attr("value");
 				
+				value = (value == null) ? "" : value;
+				
 				Connection click = HttpConnection.connect(action);
 				if(name != null)
 					click.data(name, value);
