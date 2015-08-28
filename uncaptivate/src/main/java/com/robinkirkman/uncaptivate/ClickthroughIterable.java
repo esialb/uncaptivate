@@ -22,7 +22,11 @@ public class ClickthroughIterable implements Iterable<Entry<String, Connection>>
 		for(Element form : forms) {
 			String action = form.attr("abs:action");
 			String method = form.attr("method");
-			Elements submits = form.select("input[type=submit]");
+			
+			if(action == null)
+				continue;
+			
+			Elements submits = form.select("input");
 			for(Element submit : submits) {
 				String name = submit.attr("name");
 				String value = submit.attr("value");
