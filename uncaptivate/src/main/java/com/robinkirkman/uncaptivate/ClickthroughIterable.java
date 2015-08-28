@@ -25,23 +25,24 @@ public class ClickthroughIterable implements Iterable<Entry<String, Connection>>
 			
 			if(action == null)
 				continue;
+
+			Connection click = HttpConnection.connect(action);
 			
 			Elements submits = form.select("input");
 			for(Element submit : submits) {
 				String name = submit.attr("name");
 				String value = submit.attr("value");
 				
-				value = (value == null) ? "" : value;
+				if(name == null)
+					continue;
 				
-				Connection click = HttpConnection.connect(action);
-				if(name != null)
-					click.data(name, value);
-				
-				if("post".equalsIgnoreCase(method))
-					clicks.add(new AbstractMap.SimpleImmutableEntry<>("post", click));
-				else
-					clicks.add(new AbstractMap.SimpleImmutableEntry<>("get", click));
+				click.data(name, value == null ? "" : value);
 			}
+			
+			if("post".equalsIgnoreCase(method))
+				clicks.add(new AbstractMap.SimpleImmutableEntry<>("post", click));
+			else
+				clicks.add(new AbstractMap.SimpleImmutableEntry<>("get", click));
 		}
 		
 		
